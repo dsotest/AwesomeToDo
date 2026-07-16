@@ -24,5 +24,5 @@ jobs:
       - uses: php-actions/phpunit@v3
         with:
           php_version: '8.3'
-          phpunit_version: '11.5.7'
+          version: '11.5.7'
           test_suffix: './tests/TodoTest.php'
