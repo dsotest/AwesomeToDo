@@ -1,0 +1,64 @@
+diff --git a/tmp/trivy-ci.yml b/tmp/trivy-ci.yml
+index fdd7081..6f85c5a 100644
+--- a/tmp/trivy-ci.yml
++++ b/tmp/trivy-ci.yml
+@@ -17,23 +17,47 @@ jobs:
+       - name: Checkout code
+         uses: actions/checkout@v4
+ 
+-      - name: Start Docker Compose services
+-        run: docker compose up -d
++      - name: Build application image
++        run: docker compose build --pull app
+ 
+-      - name: Run Trivy scan
++      - name: Scan application image
+         uses: aquasecurity/trivy-action@master
+-        with: 
+-            image-ref: 'awesometodo:latest'
+-            format: 'table'
+-            ignore-unfixed: true
+-            vuln-type: 'os,library'
+-            severity: 'HIGH,CRITICAL'
+-            output: 'trivy-report.txt'
++        with:
++          scan-type: image
++          image-ref: awesometodo:latest
++          format: table
++          ignore-unfixed: false
++          vuln-type: os,library
++          severity: UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
++          output: trivy-image-report.txt
++
++      - name: Scan repository dependencies
++        uses: aquasecurity/trivy-action@master
++        with:
++          scan-type: fs
++          scan-ref: .
++          scanners: vuln
++          format: table
++          ignore-unfixed: false
++          vuln-type: library
++          severity: UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
++          output: trivy-fs-report.txt
++
++      - name: Scan nginx image
++        uses: aquasecurity/trivy-action@master
++        with:
++          scan-type: image
++          image-ref: nginx:latest
++          format: table
++          ignore-unfixed: false
++          vuln-type: os,library
++          severity: UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
++          output: trivy-nginx-report.txt
+ 
+       - name: Upload Trivy report
+         uses: actions/upload-artifact@v4
+         with:
+           name: trivy-scan-report
+-          path: trivy-report.txt
++          path: |
++            trivy-image-report.txt
++            trivy-fs-report.txt
++            trivy-nginx-report.txt
