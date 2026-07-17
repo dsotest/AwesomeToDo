@@ -22,13 +22,13 @@ jobs:
 
       # Docker Compose のセットアップ
       - name: Start Docker Compose services
-        run: docker compose build --pull app
+        run: docker compose up -d
 
       # Trivyでコンテナイメージをスキャン
       - name: Run Trivy scan
         uses: aquasecurity/trivy-action@a9c7b0f06e461e9d4b4d1711f154ee024b8d7ab8
         with: 
-            image-ref: 'awesometodo:latest'
+            image-ref: 'ghcr.io/dsotest/awesometodo:3581c536b9f848b6177c56c95a73a56b30ff424c'
             format: 'table'
             ignore-unfixed: true
             vuln-type: 'os,library'
