@@ -30,7 +30,6 @@ jobs:
         with: 
             image-ref: 'awesometodo:latest'
             format: 'table'
-            ignore-unfixed: true
             vuln-type: 'os,library'
             severity: 'HIGH,CRITICAL'
             output: 'trivy-report.txt'
@@ -38,9 +37,8 @@ jobs:
       - name: Run Trivy nginx image scan
         uses: aquasecurity/trivy-action@a9c7b0f06e461e9d4b4d1711f154ee024b8d7ab8
         with: 
-            image-ref: 'nginx:latest'
+            image-ref: 'nginx:1.19.0-alpine'
             format: 'table'
-            ignore-unfixed: true
             vuln-type: 'os,library'
             severity: 'HIGH,CRITICAL'
             output: 'trivy-nginx-report.txt'
